@@ -14,6 +14,11 @@ public class Logger
         log("INFO", log);
     }
 
+    public void info(String format, Object... args)
+    {
+        info(String.format(format, args));
+    }
+
     public void error(String log)
     {
         log("ERROR", log);

@@ -1,8 +1,11 @@
 package tasks;
 
 import logger.Logger;
+import org.powerbot.script.Condition;
+import org.powerbot.script.Random;
 import org.powerbot.script.rt4.ClientContext;
-import org.powerbot.script.rt4.Npc;
+
+import java.util.concurrent.Callable;
 
 public class Banking extends Task
 {
@@ -26,10 +29,10 @@ public class Banking extends Task
     @Override
     public void execute()
     {
-        // TODO: Look into swinging camera around to get better look at bank/banker (if needed)
         log.info("Executing");
 
         prepareToBank();
+        openBank();
         depositItems();
     }
 
@@ -45,14 +48,38 @@ public class Banking extends Task
 
     private boolean nearBank()
     {
-        // TODO: Implement!
-        return false;
+        return ctx.bank.nearest().tile().distanceTo(ctx.players.local()) <= 20;
     }
 
     private void prepareToBank()
     {
-        Npc banker = ctx.npcs.select().id(BANKER_ID).nearest().poll();
-        banker.interact("Bank");
+        if (ctx.bank.opened())
+            return;
+
+        putBankIntoViewport();
+    }
+
+    private void putBankIntoViewport()
+    {
+        if (ctx.bank.inViewport())
+            return;
+
+        ctx.camera.turnTo(ctx.bank.nearest());
+    }
+
+    private void openBank()
+    {
+        boolean openSuccessful = ctx.bank.open();
+
+        if (openSuccessful)
+            Condition.wait(new Callable<Boolean>()
+            {
+                @Override
+                public Boolean call() throws Exception
+                {
+                    return ctx.bank.opened();
+                }
+            }, 250, 20);
     }
 
     private void depositItems()
@@ -64,25 +91,19 @@ public class Banking extends Task
         }
     }
 
-    private void waitRandomAmountOfTime(long min, long max)
+    private void waitRandomAmountOfTime(int min, int max)
     {
-        pause(calculateTimeToWait(min, max, Math.random()));
-    }
-
-    /**
-     * Calculates a random weight time between min and max but actual wait time is stretched out as the running time of
-     * the script increases
-     */
-    private long calculateTimeToWait(long min, long max, double random)
-    {
-        return (long) (Math.floor(random * (max - min)) + min);
+        pause((long) Random.nextInt(min, max));
     }
 
     private void pause(long waitTime)
     {
-        try {
+        try
+        {
             Thread.sleep(waitTime);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             log.error("Caught an Interrupted Exception while sleeping", e);
         }
     }

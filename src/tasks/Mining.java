@@ -2,6 +2,7 @@ package tasks;
 
 import logger.Logger;
 import org.powerbot.script.Condition;
+import org.powerbot.script.Random;
 import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.rt4.GameObject;
 
@@ -31,19 +32,18 @@ public class Mining extends Task
     @Override
     public boolean isReady()
     {
-        // TODO: Fine tune so it's ready only when near coal.
-        return playerIsInactive() && !inventoryIsFull() && nearCoal();
+        return playerIsInactive() && !inventoryIsFull() && nearOre();
     }
 
     @Override
     public void execute()
     {
-        // TODO: Look into swinging camera around to get better look at coal (if needed)
-        waitRandomAmountOfTime(157L, 429L, System.currentTimeMillis() - startTime);
+        waitRandomAmountOfTime(587, 1105, System.currentTimeMillis() - startTime);
 
         log.info("Executing");
 
-        missClick(0.063);
+        prepareToMine();
+        missClick(0.137);
         mineCoal();
         waitUntilMiningIsFinished();
     }
@@ -58,10 +58,28 @@ public class Mining extends Task
         return ctx.inventory.select().count() == 28;
     }
 
-    private boolean nearCoal()
+    private boolean nearOre()
     {
-        // TODO: Implement!
+        for (int oreId : oreIds)
+            if (ctx.objects.select().id(oreId).nearest().poll().tile().distanceTo(ctx.players.local()) < 20)
+                return true;
+
         return false;
+    }
+
+    private void waitRandomAmountOfTime(int min, int max, long totalRunningTime)
+    {
+        pause(calculateTimeToWait(min, max, totalRunningTime));
+    }
+
+    private void prepareToMine()
+    {
+        GameObject nearestOre = fetchNearestOre();
+
+        if (nearestOre.inViewport())
+            return;
+
+        putOreIntoViewport(nearestOre);
     }
 
     private void missClick(double chanceOfMissClicking)
@@ -69,18 +87,43 @@ public class Mining extends Task
         if (Math.random() > chanceOfMissClicking)
             return;
 
-        GameObject nearestCoal = fetchNearestCoal();
+        GameObject nearestCoal = fetchNearestOre();
         Point nearestCoalCenter = nearestCoal.centerPoint();
 
-        log.info(String.format("Miss Clicking....Nearest Coal is at (%f, %f)",
+        log.info(String.format("Miss Clicking....Nearest Coal is at (%f, %f) with height: %d and width: %d",
                 nearestCoalCenter.getX(),
-                nearestCoalCenter.getY())
+                nearestCoalCenter.getY(),
+                nearestCoal.height(),
+                nearestCoal.width())
         );
 
         click(
-                (int) nearestCoalCenter.getX() + (randomDirection() * (nearestCoal.width() / 2) + randomNumber(1, 4)),
-                (int) nearestCoalCenter.getY() + (randomDirection() * (nearestCoal.height() / 2) + randomNumber(2, 6))
+                (int) nearestCoalCenter.getX() + (randomDirection() * (nearestCoal.width() / 2) + Random.nextInt(1, 4)),
+                (int) nearestCoalCenter.getY() + (randomDirection() * (nearestCoal.height() / 2) + Random.nextInt(2, 6))
         );
+    }
+
+    private void mineCoal()
+    {
+        GameObject nearestCoal = fetchNearestOre();
+        nearestCoal.interact("Mine");
+    }
+
+    private void waitUntilMiningIsFinished()
+    {
+        Condition.wait(new Callable<Boolean>()
+        {
+            @Override
+            public Boolean call() throws Exception
+            {
+                return ctx.players.local().animation() != -1;
+            }
+        });
+    }
+
+    private void putOreIntoViewport(GameObject ore)
+    {
+        ctx.camera.turnTo(ore.tile());
     }
 
     private void click(int x, int y)
@@ -93,57 +136,38 @@ public class Mining extends Task
         return Math.random() < 0.5 ? 1 : -1;
     }
 
-    private int randomNumber(long min, long max)
-    {
-        return (int) (Math.floor(Math.random() * (max - min)) + min);
-    }
-
-    private void mineCoal()
-    {
-        GameObject nearestCoal = fetchNearestCoal();
-        nearestCoal.interact("Mine");
-    }
-
-    private GameObject fetchNearestCoal()
+    private GameObject fetchNearestOre()
     {
         return ctx.objects.select().id(oreIds).nearest().poll();
-    }
-
-    private void waitUntilMiningIsFinished()
-    {
-        Condition.wait(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                return ctx.players.local().animation() != -1;
-            }
-        });
-    }
-
-    private void waitRandomAmountOfTime(long min, long max, long totalRunningTime)
-    {
-        pause(calculateTimeToWait(min, max, totalRunningTime));
     }
 
     /**
      * Calculates a random weight time between min and max but actual wait time is stretched out as the running time of
      * the script increases
      */
-    private long calculateTimeToWait(long min, long max, long totalRunningTime)
+    private long calculateTimeToWait(int min, int max, long totalRunningTime)
     {
-        if (Math.random() < .075)
-        {
-            return 2542;
-        }
+        double randomNumber = Math.random();
 
-        long waitTime = (long) randomNumber(min, max);
+        if (randomNumber < 0.003)
+            return Random.nextInt(60523, 127443);
+
+        if (randomNumber < 0.05)
+            return Random.nextInt(2519, 28111);
+
+        long waitTime = (long) Random.nextInt(min, max);
         return (long) Math.floor(waitTime * (1 / (1 - (totalRunningTime / TWO_AND_A_HALF_HOURS_MILLIS))));
     }
 
     private void pause(long waitTime)
     {
-        try {
+        log.info(String.format("Sleeping for %d millis", waitTime));
+        try
+        {
             Thread.sleep(waitTime);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             log.error("Caught an Interrupted Exception while sleeping", e);
         }
     }

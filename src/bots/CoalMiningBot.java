@@ -16,13 +16,12 @@ import java.util.List;
 @Script.Manifest(name="Mining", description = "Automatically Mines Coal from Dwarven Mine", properties = "author=VirHircinus; topic=999; client=4;")
 public class CoalMiningBot extends PollingScript<ClientContext>
 {
-    private final static int[] COAL_ROCK_IDS = {11366, 11367};
+    private static final int[] COAL_ROCK_IDS = {11366, 11367};
     private static final int COAL_INVENTORY_ID = 453;
-    private static final Tile[] dwarvenMineToBank = {new Tile(3058, 9776, 0), new Tile(3061, 3376, 0), new Tile(3042, 3369, 0), new Tile(3022, 3367, 0)};
-    private static final Tile[] bankToDwarvenMine =  {new Tile(3015, 3362, 0), new Tile(3035, 3367, 0), new Tile(3055, 3370, 0), new Tile(3058, 9776, 0)};
+    private static final Tile[] path = {new Tile(3012, 3356, 0), new Tile(3022, 3361, 0), new Tile(3031, 3366, 0), new Tile(3041, 3368, 0), new Tile(3051, 3369, 0), new Tile(3060, 3374, 0), new Tile(3058, 9777, 0)};
 
     private List<Task> tasks = new ArrayList<Task>();
-    private Logger     log   = new Logger(this.getClass());
+    private Logger log = new Logger(this.getClass());
 
     @Override
     public void start()
@@ -30,9 +29,10 @@ public class CoalMiningBot extends PollingScript<ClientContext>
         log.info("Started");
 
         tasks.add(new Mining(ctx, COAL_ROCK_IDS, System.currentTimeMillis()));
-        tasks.add(new Walking(ctx, dwarvenMineToBank));
-        tasks.add(new Walking(ctx, bankToDwarvenMine));
         tasks.add(new Banking(ctx, COAL_INVENTORY_ID));
+
+        //TODO: Debug and figure out walking...
+//        tasks.add(new Walking(ctx, path));
     }
 
     @Override
