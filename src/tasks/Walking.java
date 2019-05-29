@@ -4,29 +4,23 @@ import logger.Logger;
 import org.powerbot.script.Random;
 import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.ClientContext;
-import walker.Walker;
+import org.powerbot.script.rt4.TilePath;
 
 public class Walking extends Task
 {
     private Logger log = new Logger(this.getClass());
-    private Tile[] path;
-    private Walker walker;
-    private boolean alreadyWalking;
-    private boolean alreadyWalkingReverse;
+    private TilePath path;
 
     public Walking(ClientContext ctx, Tile[] path)
     {
         super(ctx);
-        this.path = path;
-        this.walker = new Walker(ctx);
-        this.alreadyWalking = false;
-        this.alreadyWalkingReverse = false;
+        this.path = new TilePath(ctx, path);
     }
 
     @Override
     public boolean isReady()
     {
-        return playerIsInactive() && ((nearBeginningOfPath() || alreadyWalking) || (nearEndOfPath() || alreadyWalkingReverse));
+        return nearBeginningOfPath() || nearEndOfPath();
     }
 
     @Override
@@ -40,35 +34,28 @@ public class Walking extends Task
 
         if (!playerIsWalking() || !destinationExists() || destinationIsWithin(7, 12))
         {
-            if (nearBeginningOfPath() || alreadyWalking)
+            if (nearBeginningOfPath())
             {
                 log.info("Walking From Bank To Dwarven Mine");
-                this.alreadyWalking = walker.walkPath(path);
-                log.info("Still walking? %b", alreadyWalking);
+                path.traverse();
             }
 
-            if (nearEndOfPath() || alreadyWalkingReverse)
+            if (nearEndOfPath())
             {
                 log.info("Walking From Dwarven Mine To Bank");
-                this.alreadyWalkingReverse = walker.walkPathReverse(path);
-                log.info("Still walking? %b", alreadyWalkingReverse);
+                path.reverse().traverse();
             }
         }
     }
 
-    private boolean playerIsInactive()
-    {
-        return ctx.players.local().animation() == -1;
-    }
-
     private boolean nearBeginningOfPath()
     {
-        return nearTile(path[0], 15);
+        return nearTile(path.start(), 15);
     }
 
     private boolean nearEndOfPath()
     {
-        return nearTile(path[path.length - 1], 15);
+        return nearTile(path.end(), 15);
     }
 
     private boolean playerIsWalking()
