@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 public class Mining extends Task
 {
-    private static final long TWO_AND_A_HALF_HOURS_MILLIS = 3600 * 2500;
+    private static final long FIVE_HOURS_MILLIS = 3600 * 5000;
 
     private Logger log = new Logger(this.getClass());
     private int[] oreIds;
@@ -156,7 +156,7 @@ public class Mining extends Task
             return Random.nextInt(2519, 28111);
 
         long waitTime = (long) Random.nextInt(min, max);
-        return (long) Math.floor(waitTime * (1 / (1 - (totalRunningTime / TWO_AND_A_HALF_HOURS_MILLIS))));
+        return (long) Math.floor(waitTime * (1 / (1 - (totalRunningTime / FIVE_HOURS_MILLIS))));
     }
 
     private void pause(long waitTime)
