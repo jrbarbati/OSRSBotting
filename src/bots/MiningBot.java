@@ -1,38 +1,38 @@
 package bots;
 
+import input.Input;
 import logger.Logger;
 import org.powerbot.script.PollingScript;
 import org.powerbot.script.Script;
 import org.powerbot.script.Tile;
 import org.powerbot.script.rt4.ClientContext;
+import rock.Rocks;
 import tasks.Banking;
 import tasks.Mining;
 import tasks.Task;
-import tasks.Walking;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Script.Manifest(name="Mining", description = "Automatically Mines Coal from Dwarven Mine", properties = "author=VirHircinus; topic=999; client=4;")
-public class CoalMiningBot extends PollingScript<ClientContext>
+@Script.Manifest(
+        name="Mining",
+        description = "Automatically Mines Coal from Dwarven Mine",
+        properties = "author=VirHircinus; topic=999; client=4;"
+)
+public class MiningBot extends PollingScript<ClientContext>
 {
-    private static final int[] COAL_ROCK_IDS = {11366, 11367};
-    private static final int COAL_INVENTORY_ID = 453;
-    private static final Tile[] path = {new Tile(3012, 3356, 0), new Tile(3022, 3361, 0), new Tile(3031, 3366, 0), new Tile(3041, 3368, 0), new Tile(3051, 3369, 0), new Tile(3060, 3374, 0), new Tile(3058, 9777, 0)};
-
     private List<Task> tasks = new ArrayList<Task>();
     private Logger log = new Logger(this.getClass());
+    private Rocks rocks = new Rocks();
 
     @Override
     public void start()
     {
         log.info("Started");
 
-        tasks.add(new Mining(ctx, COAL_ROCK_IDS, System.currentTimeMillis()));
-        tasks.add(new Banking(ctx, COAL_INVENTORY_ID));
+        String selectedOre = Input.popupDialogWithOptions("Which ore would you like to mine?", rocks.types());
 
-        //TODO: Debug and figure out walking...
-//        tasks.add(new Walking(ctx, path));
+        tasks.add(new Mining(ctx, rocks.getRock(selectedOre).getRockIds(), System.currentTimeMillis()));
     }
 
     @Override
