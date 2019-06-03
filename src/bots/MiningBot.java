@@ -89,7 +89,7 @@ public class MiningBot extends PollingScript<ClientContext> implements PaintList
         g.drawString("Mining Bot Session Stats", 20, 20);
 
         g.drawString(String.format("Total XP Gained: %d", miningXpGained), 20, 40);
-        g.drawString(String.format("XP/Hour:         %.0f", calculateXpPerHour(miningXpGained)), 20, 60);
+        g.drawString(String.format("XP/Hour: %.0f", calculateXpPerHour(miningXpGained)), 20, 60);
     }
 
     private int calculateXpGained(String skillKey, int skill)
