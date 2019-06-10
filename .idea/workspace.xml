@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cbfe23bb-7f1d-4b63-b160-4d2c24250852" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RSBot-7093.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/bots/MiningBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/bots/MiningBot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bots/MiningBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/bots/MiningBot.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,22 +21,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/bots/MiningBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="91" column="56" selection-start-line="91" selection-start-column="56" selection-end-line="91" selection-end-column="56" />
+            <state relative-caret-position="1547">
+              <caret line="111" column="39" selection-start-line="111" selection-start-column="39" selection-end-line="111" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/RSBot-7093.jar!/org/powerbot/script/PollingScript.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
-              <folding>
-                <element signature="e#1964#1965#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -159,8 +147,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="9" />
-    <option name="y" value="22" />
+    <option name="x" value="7" />
+    <option name="y" value="33" />
     <option name="width" value="1982" />
     <option name="height" value="1187" />
   </component>
@@ -171,6 +159,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -222,12 +211,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/RSBot-7093.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/RSBot-7094.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -248,7 +236,7 @@
   <component name="RunManager">
     <configuration name="Oldschool RuneScape" type="JarApplication">
       <option name="JAR_PATH" value="$USER_HOME$/jagexcache/jagexlauncher/bin/jagexappletviewer.jar" />
-      <option name="VM_PARAMETERS" value="-Djava.search.path=out -Dcom.jagex.config=http://oldschool.runescape.com/l=en/jav_config.ws -javaagent:&quot;C:\Users\Buttsoup\Desktop\OSRSBot\RSBot-7093.jar&quot;" />
+      <option name="VM_PARAMETERS" value="-Djava.search.path=out -Dcom.jagex.config=http://oldschool.runescape.com/l=en/jav_config.ws -javaagent:&quot;C:\Users\Buttsoup\Desktop\OSRSBot\RSBot-7094.jar&quot;" />
       <option name="PROGRAM_PARAMETERS" value="runescape" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Buttsoup\Desktop\OSRSBot" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -279,10 +267,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="9" y="22" width="1982" height="1187" extended-state="0" />
+    <frame x="7" y="33" width="1982" height="1187" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19042663" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1987513" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -373,8 +361,8 @@
     <entry file="file://$PROJECT_DIR$/src/tasks/Walking.java" />
     <entry file="file://$PROJECT_DIR$/src/bots/MiningBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="91" column="56" selection-start-line="91" selection-start-column="56" selection-end-line="91" selection-end-column="56" />
+        <state relative-caret-position="1547">
+          <caret line="111" column="39" selection-start-line="111" selection-start-column="39" selection-end-line="111" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -383,11 +371,8 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/RSBot-7093.jar!/org/powerbot/script/PollingScript.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
+        <state relative-caret-position="561">
           <caret line="49" selection-start-line="49" selection-end-line="49" />
-          <folding>
-            <element signature="e#1964#1965#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
