@@ -24,8 +24,8 @@ import java.util.Map;
 )
 public class MiningBot extends PollingScript<ClientContext> implements PaintListener
 {
-    private List<Task> tasks = new ArrayList<Task>();
     private Logger log = new Logger(this.getClass());
+    private List<Task> tasks = new ArrayList<>();
     private Rocks rocks = new Rocks();
     private Map<String, Integer> startingXp = new HashMap<>();
 
@@ -94,7 +94,9 @@ public class MiningBot extends PollingScript<ClientContext> implements PaintList
 
     private int calculateXpGained(String skillKey, int skill)
     {
-        return currentXp(skill) - startingXp.get(skillKey);
+        return startingXp.containsKey(skillKey)
+                ? currentXp(skill) - startingXp.get(skillKey)
+                : 0;
     }
 
     private double calculateXpPerHour(int xpGained)
